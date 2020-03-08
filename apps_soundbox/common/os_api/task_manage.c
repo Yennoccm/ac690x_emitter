@@ -42,13 +42,13 @@ const struct task_info *task_list[] =
 
     &music_task_info,
 
-#if FM_RADIO_EN
+#if 1
     &fm_radio_task_info,
 #endif
     //
     &linein_task_info,
     //
-#if USB_PC_EN
+#if 1
     &pc_task_info,
 #endif
     //
@@ -65,7 +65,7 @@ const struct task_info *task_list[] =
 #endif
     //
 
-#if RCSP_LIGHT_HW    
+#if RCSP_LIGHT_HW
     &light_task_info,
 #endif
 
@@ -100,7 +100,7 @@ u32 app_usb_slave_online_status_null(void)
 
 
 
-#if USB_PC_EN
+#if 1
 const struct task_dev_info pc_task_2_dev =
 {
     .name = "USBdevTask",
@@ -117,7 +117,7 @@ const struct task_dev_info *task_connect_dev[] =
     &linein_task_2_dev,
 #endif/*AUX_DETECT_EN*/
 
-#if USB_PC_EN
+#if 1
     &pc_task_2_dev,
 #endif/*USB_PC_EN*/
 
@@ -341,7 +341,7 @@ RUN_TASK_STATUS task_switch(char *task_name, void *priv, TASK_SWITCH_MODE cur_mo
 }
 
 /*----------------------------------------------------------------------------*/
-/**@brief 	create a task 
+/**@brief 	create a task
  @param  	task_name
  @return	-1,create task fail
  			 0,create task success

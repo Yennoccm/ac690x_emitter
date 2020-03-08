@@ -5,7 +5,7 @@
 
 #if REC_EN
 
-#if LED_7_EN
+#if 0
 void ui_open_rec_led(void *buf,u32 len)
 {
     puts("ui_open_rec_led\n");
@@ -23,7 +23,7 @@ void ui_open_rec_led(void *buf,u32 len)
 }
 #endif
 
-#if LCD_128X64_EN
+#if 1
 void ui_open_rec_lcd(void *buf,u32 len)
 {
     puts("ui_open_rec_lcd\n");
@@ -38,9 +38,9 @@ void ui_open_rec_lcd(void *buf,u32 len)
 void ui_open_rec(void *buf,u32 len)
 {
     //puts("open rec ui\n");
-#if UI_ENABLE
+#if 1
 
-#if LED_7_EN
+#if 0
     ui_open_rec_led(buf, len);
 #endif
 
@@ -48,7 +48,7 @@ void ui_open_rec(void *buf,u32 len)
     ui_open_rec_seg(buf, len);
 #endif
 
-#if LCD_128X64_EN
+#if 1
     ui_open_rec_lcd(buf, len);
 #endif
 
@@ -56,7 +56,7 @@ void ui_open_rec(void *buf,u32 len)
     ui_open_rec_tft(buf, len);
 #endif
 
-#endif/*UI_ENABLE*/
+#endif/*1*/
 }
 
 void ui_close_rec(void)

@@ -1,4 +1,5 @@
 #include "sdk_cfg.h"
+#include "global_var.h"
 #include "dac/dac_api.h"
 #include "ui/lcd/lcd_disp.h"
 #include "uicon/ui_con.h"
@@ -22,9 +23,11 @@
 #include "encode/encode.h"
 #endif
 
-#if  LCD_128X64_EN
+#if  1
 #include "ui/lcd/lcd_drv_interface.h"
 #include "bluetooth/bt_ui.h"
+#include "../../../../include/bluetooth/emitter_user.h"
+
 
 
 typedef enum
@@ -147,7 +150,7 @@ void lcd_disp_string_menu(u8 menu)
         "    LOADING     ",
     };
 
-	const char dev_err_string[][17] = 
+	const char dev_err_string[][17] =
 	{
         "    Device      ",
         "  not exist!!!  ",
@@ -521,58 +524,55 @@ void lcd_music_main(void)
 ///------------bt-display--------------
 void lcd_bt_main(u8 menu)
 {
-    const char lcd_string[] = {"蓝牙"};
-    lcd_disp_text(lcd_string, DVcTxt1_1);
-
-#if 1
-    BT_DIS_VAR * bt_var;
-
-    bt_var = (BT_DIS_VAR *)UI_var.ui_buf_adr;
-
-    if(bt_var)
+    BT_DIS_VAR * bt_var = (BT_DIS_VAR *)UI_var.ui_buf_adr;
+    if(!bt_var){
+        lcd_disp_text(lcd_bt_error, DVcTxt1_1);
+    }
+    if(get_emitter_role()==BD_ROLE_HOST)
     {
-        if((BT_STATUS_CONNECTING == bt_var->ui_bt_connect_sta)||
-                (BT_STATUS_TAKEING_PHONE == bt_var->ui_bt_connect_sta)||
-                (BT_STATUS_PLAYING_MUSIC == bt_var->ui_bt_connect_sta))
+        ///Emitting Mode
+        if((BT_STATUS_CONNECTING == bt_var->ui_bt_connect_sta))
         {
-            const char connecting_str[] = {"    连接成功    "};
-            lcd_disp_text(connecting_str, DVcTxt2_1);
-
-            if (BT_STATUS_TAKEING_PHONE == bt_var->ui_bt_connect_sta)
-            {
-                const char taking_phone_str[] = {"    正在通话    "};
-                lcd_disp_text(taking_phone_str, DVcTxt3_1);
-                lcd_disp_rec_opt_state();
-            }
-            else
-            {
-                if(BT_STATUS_PLAYING_MUSIC == bt_var->ui_bt_connect_sta)
-                {
-                    ///playing
-                    const char music_play_str[] = {"    音乐播放    "};
-                    lcd_disp_text(music_play_str, DVcTxt3_1);
-                }
-                else
-                {
-                    ///pause
-                    const char music_pause_str[] = {"    音乐暂停    "};
-                    lcd_disp_text(music_pause_str, DVcTxt3_1);
-                }
-                lcd_check_echo_sw();
-            }
+            lcd_disp_text(lcd_bt_emit_connected, DVcTxt1_1);
+            lcd_disp_text((char *)global_device_name, DVcTxt2_1);
+            lcd_disp_text(lcd_bt_disceonnect,DVcTxt3_1);
         }
         else
         {
-            const char connecting_str[] = {"    等待连接    "};
-            lcd_disp_text(connecting_str, DVcTxt2_1);
-            lcd_check_echo_sw();
+            lcd_disp_text(lcd_bt_emit_waiting, DVcTxt1_1);
+            lcd_disp_text(lcd_bt_scan,DVcTxt2_1);
+            lcd_disp_text(lcd_bt_receonnect,DVcTxt3_1);
         }
-
-        lcd_check_sys_vol();
-
     }
-#endif
-//    puts("---bt-display---\n");
+    else
+    {
+        ///Normal Mode
+        BT_DIS_VAR * bt_var = (BT_DIS_VAR *)UI_var.ui_buf_adr;
+
+            if((BT_STATUS_CONNECTING == bt_var->ui_bt_connect_sta)||(BT_STATUS_PLAYING_MUSIC == bt_var->ui_bt_connect_sta))
+            {
+                const char connecting_str[] = {"BlueReceive-Connect"};
+                lcd_disp_text(connecting_str, DVcTxt1_1);
+                if(BT_STATUS_PLAYING_MUSIC == bt_var->ui_bt_connect_sta)
+                {
+                    const char music_play_str[] = {"Playing"};
+                    lcd_disp_text(music_play_str, DVcTxt2_1);
+                }
+                else
+                {
+                    const char music_pause_str[] = {"Paused"};
+                    lcd_disp_text(music_pause_str, DVcTxt2_1);
+                }
+                lcd_check_echo_sw();
+            }
+            else
+            {
+                const char connecting_str[] = {"BlueReceive-Wait"};
+                lcd_disp_text(connecting_str, DVcTxt1_1);
+                lcd_check_echo_sw();
+            }
+            lcd_check_sys_vol();
+    }
 }
 
 ///------------pc-display--------------
@@ -591,7 +591,7 @@ void lcd_fm_main(u8 menu)
     char lcd_freq_str[] = {"        87.5MHz "};
 
     lcd_disp_text(lcd_string, DVcTxt1_1);
-#if FM_RADIO_EN
+#if 1
     FM_MODE_VAR * fm_var;
 
     if(!UI_var.ui_buf_adr)
@@ -684,65 +684,7 @@ void lcd_rtc_main(void)
 ///------------rec-display--------------
 void lcd_rec_main(void)
 {
-#if REC_EN
-    RECORD_OP_API * rec_var_p;
-    REC_CTL * rec_ctl_var;
-    u32 rec_time;
-
-//    TIME time_tmp;
-    char lcd_time_str[] = {"     00:00:00  "};
-    const char lcd_string[] = {"录音"};
-    char rec_nodevice_str[] = {"   no device!!!"};
-    const char lcd_sta_str[][17] =
-    {
-        "    ENC_STOP    ",
-        "    ENC_START   ",
-        "    ENC_PAUSE   ",
-    };
-
-    lcd_disp_text(lcd_string, DVcTxt1_1);
-
-    if(UI_var.ui_buf_adr)
-    {
-        rec_var_p = *(RECORD_OP_API **)UI_var.ui_buf_adr;
-        if(rec_var_p)
-        {
-            rec_ctl_var = rec_var_p->rec_ctl;
-            if(rec_ctl_var)
-            {
-                lcd_disp_text((const char *)(lcd_sta_str[rec_ctl_var->enable]), DVcTxt2_1);
-
-                rec_time = rec_ctl_var->file_info.enc_time_cnt;
-
-                if(rec_ctl_var->enable != ENC_STOP)
-                {
-                    lcd_dis_dev(rec_ctl_var->curr_device,DVcTxt3_1);
-                    /* printf("rec_time = %d\n",rec_time); */
-                    itoa2_api(rec_time/3600,(u8 *)&lcd_time_str[5]);
-                    itoa2_api(rec_time%3600/60,(u8 *)&lcd_time_str[8]);
-                    itoa2_api(rec_time%60,(u8 *)&lcd_time_str[11]);
-					/* printf("\n%s\n",lcd_time_str); */
-                    lcd_disp_text((const char *)(lcd_time_str), DVcTxt3_1);//TIME
-                }
-                //return;
-            }
-        }
-        else
-        {
-            lcd_disp_text((const char *)(lcd_sta_str[ENC_STOP]), DVcTxt2_1);//STOP
-            if(file_operate_get_total_phydev() == 0)
-            {
-                lcd_disp_text(rec_nodevice_str, DVcTxt3_1);
-                return;
-            }
-        }
-
-        lcd_disp_rec_opt_state();
-		lcd_check_sys_vol();
-    }
-
-#endif
-
+    ///NOT USE REC FUN
 }
 
 ///------------aux-display--------------
@@ -855,7 +797,7 @@ void lcd_alarm_ring(void)
 }
 
 
-#endif/*LCD_128x64_EN*/
+#endif/*1*/
 
 
 

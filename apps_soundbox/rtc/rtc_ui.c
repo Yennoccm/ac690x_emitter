@@ -17,7 +17,7 @@
 
 #if RTC_CLK_EN
 
-#if LED_7_EN
+#if 0
 void ui_open_rtc_led(void *buf,u32 len)
 {
     rtc_puts("ui_open_aux_led\n");
@@ -30,7 +30,7 @@ void ui_open_rtc_led(void *buf,u32 len)
 }
 #endif
 
-#if LCD_128X64_EN
+#if 1
 void ui_open_rtc_lcd(void *buf,u32 len)
 {
     rtc_puts("ui_open_aux_lcd\n");
@@ -55,9 +55,9 @@ void ui_open_rtc_lcd(void *buf,u32 len)
 
 void ui_open_rtc(void *buf,u32 len)
 {
-#if UI_ENABLE
+#if 1
 
-#if LED_7_EN
+#if 0
     ui_open_rtc_led(buf,len);
 #endif
 
@@ -65,7 +65,7 @@ void ui_open_rtc(void *buf,u32 len)
     ui_open_rtc_seg(buf,len);
 #endif
 
-#if LCD_128X64_EN
+#if 1
     ui_open_rtc_lcd(buf,len);
 #endif
 
@@ -73,7 +73,7 @@ void ui_open_rtc(void *buf,u32 len)
     ui_open_rtc_tft(buf,len);
 #endif
 
-#endif/*UI_ENABLE*/
+#endif/*1*/
 }
 
 void ui_close_rtc(void)

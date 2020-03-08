@@ -20,8 +20,7 @@ void put_u16hex(u16 dat);
 s32 EQ_uart_init();
 
 extern void register_handle_printf_putchar(void (*handle)(char a));
-// #define UART_BAUD_RAE	115200
-#define UART_BAUD_RAE	460800
+#define UART_BAUD_RAE	128000
 
 #endif
 

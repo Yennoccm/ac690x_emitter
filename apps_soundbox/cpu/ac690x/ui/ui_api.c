@@ -13,11 +13,11 @@
 
 UI_VAR UI_var;   //UI œ‘ æ±‰¡ø
 
-#if UI_ENABLE
+#if 1
 
 UI_DISP_API * ui_disp_api;
 
-#if LED_7_EN
+#if 0
 static const UI_DISP_API ui_led7 =
 {
     ///--------common------///
@@ -57,7 +57,7 @@ static const UI_DISP_API ui_led7 =
 };
 #endif
 
-#if LCD_128X64_EN
+#if 1
 static const UI_DISP_API ui_lcd12864 =
 {
     ///--------common------///
@@ -236,12 +236,12 @@ u32 ui_menu_get_arg(u8 type)
 void ui_init_api(void)
 {
 
-#if LED_7_EN
+#if 0
     led7_init();
     ui_disp_api = (UI_DISP_API *)&ui_led7;
 #endif
 
-#if LCD_128X64_EN
+#if 1
     lcd_init();
     ui_disp_api = (UI_DISP_API*)&ui_lcd12864;
 #endif
@@ -328,7 +328,7 @@ void ui_menu_api(u8 menu, s32 arg)
         }
     }
 
-#if LED_7_EN
+#if 0
     led7_setX(0);
 #endif
 
@@ -443,7 +443,7 @@ void ui_menu_api(u8 menu, s32 arg)
         break;
     }
 
-#if LCD_128X64_EN
+#if 1
     draw_lcd_buf();
 #endif
 }

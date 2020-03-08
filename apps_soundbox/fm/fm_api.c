@@ -9,7 +9,7 @@
 /*----------------------------------------------------------------------------*/
 #include "sdk_cfg.h"
 
-#if FM_RADIO_EN
+#if 1
 
 #include "fm/fm_radio.h"
 #include "fm/fm_api.h"
@@ -314,15 +314,15 @@ bool fm_radio_scan(u8 mode)
 
     //全频搜索频点显示
     SET_UI_LOCK(MENU_FM_DISP_FRE);
-#if LED_7_EN
+#if 0
     UI_menu(MENU_FM_DISP_FRE);
-#endif // LED_7_EN
-#if LCD_128X64_EN
+#endif // 0
+#if 1
 	if(MENU_FM_MAIN == UI_GET_CUR_MENU())
 	{
 		UI_menu(MENU_REFRESH);
 	}
-#endif // LCD_128X64_EN
+#endif // 1
     if (tres)						//找到一个台
     {
         if(fm_mode_var->fm_mute)
@@ -337,12 +337,12 @@ bool fm_radio_scan(u8 mode)
 
         //显示搜到的频道
         SET_UI_LOCK(MENU_FM_FIND_STATION);
-#if LED_7_EN
+#if 0
         UI_menu(MENU_FM_FIND_STATION);
-#endif // LED_7_EN
-#if LCD_128X64_EN
+#endif // 0
+#if 1
         UI_menu(MENU_REFRESH);
-#endif // LCD_128X64_EN
+#endif // 1
         return TRUE;
     }
 

@@ -14,7 +14,7 @@
 
 #if 1
 
-#if LED_7_EN
+#if 0
 void ui_open_pc_led(void *buf,u32 len)
 {
     puts("ui_open_pc_led\n");
@@ -31,7 +31,7 @@ void ui_open_pc_led(void *buf,u32 len)
 }
 #endif
 
-#if LCD_128X64_EN
+#if 1
 void ui_open_pc_lcd(void *buf,u32 len)
 {
     puts("ui_open_pc_lcd\n");
@@ -45,9 +45,9 @@ void ui_open_pc_lcd(void *buf,u32 len)
 void ui_open_pc(void *buf,u32 len)
 {
     //puts("open aux ui\n");
-#if UI_ENABLE
+#if 1
 
-#if LED_7_EN
+#if 0
     ui_open_pc_led(buf, len);
 #endif
 
@@ -55,7 +55,7 @@ void ui_open_pc(void *buf,u32 len)
     ui_open_pc_seg(buf, len);
 #endif
 
-#if LCD_128X64_EN
+#if 1
     ui_open_pc_lcd(buf, len);
 #endif
 
@@ -63,7 +63,7 @@ void ui_open_pc(void *buf,u32 len)
     ui_open_pc_tft(buf, len);
 #endif
 
-#endif/*UI_ENABLE*/
+#endif/*1*/
 }
 
 void ui_close_pc(void)

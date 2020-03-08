@@ -23,7 +23,7 @@
 #include "clock.h"
 #include "dac/eq.h"
 #include "rcsp/rcsp_interface.h"
-#if FM_RADIO_EN
+#if 1
 
 
 extern void *malloc_fun(void *ptr,u32 len,char *info);
@@ -49,7 +49,7 @@ extern bool fm_test_set_freq(u16 freq);
    @note   用于直接测试听台效果
 */
 /*----------------------------------------------------------------------------*/
-const u16 fm_test_freq_arr[] = 
+const u16 fm_test_freq_arr[] =
 {
 	875,
 	878,
@@ -501,7 +501,7 @@ static void fm_radio_task(void *p)
 			/* break; */
 			/* fm_msg_printf(); //for fm_scan_debug */
 			/* break; */
-#if UI_ENABLE
+#if 1
             if (UI_var.bCurMenu == MENU_INPUT_NUMBER)   //暂停和播放
             {
                 os_taskq_post(FM_TASK_NAME, 1, MSG_INPUT_TIMEOUT);
@@ -530,7 +530,7 @@ static void fm_radio_task(void *p)
             break;
 
         case MSG_MUSIC_PP:
-#if UI_ENABLE
+#if 1
             if (UI_var.bCurMenu == MENU_INPUT_NUMBER)   //暂停和播放
             {
                 os_taskq_post(FM_TASK_NAME, 1, MSG_INPUT_TIMEOUT);
@@ -635,7 +635,7 @@ static void fm_radio_task(void *p)
         }
 #if SUPPORT_APP_RCSP_EN
 		rcsp_fm_task_msg_deal_after(msg);
-#endif    
+#endif
 	}
 }
 

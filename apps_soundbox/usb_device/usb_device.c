@@ -27,7 +27,7 @@ extern u32 usb_device_unmount(void);
 extern DAC_CTL dac_ctl;
 
 
-#if USB_PC_EN
+#if 1
 
 #undef 	NULL
 #define NULL	0
@@ -197,14 +197,14 @@ static void pc_task(void *p)
 
 
 #if SUPPORT_APP_RCSP_EN
-		rcsp_pc_task_msg_deal_before(msg);	
+		rcsp_pc_task_msg_deal_before(msg);
 #endif
 		switch(msg[0])
         {
         case SYS_EVENT_DEL_TASK:
             pc_puts("PC_SYS_EVENT_DEL_TASK 1\n");
 
-            if(pc_mute_status && !sys_mute_flag) 
+            if(pc_mute_status && !sys_mute_flag)
            		pc_dac_mute(0, FADE_ON);
 
             if (os_task_del_req_name(OS_TASK_SELF) == OS_TASK_DEL_REQ)
@@ -363,7 +363,7 @@ static void pc_task(void *p)
         }
 
 #if SUPPORT_APP_RCSP_EN
-		rcsp_pc_task_msg_deal_after(msg);	
+		rcsp_pc_task_msg_deal_after(msg);
 #endif
 
 	}

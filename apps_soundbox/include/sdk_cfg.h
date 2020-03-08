@@ -16,7 +16,7 @@
 #define _CONFIG_
 
 #include "includes.h"
-
+#include "global_var.h"
 
 ///任务堆栈大小配置测试
 #define VM_TASK_STACK_SIZE          (1024 * 1)
@@ -136,17 +136,12 @@
 /*
  *           --------外设类配置
  */
- #if (BT_STEREO == 1)
-	#define SDMMC0_EN           0
-	#define SDMMC1_EN           0
-	#define USB_DISK_EN         0
-	#define USB_PC_EN           0
-#else
+
     #define SDMMC0_EN           0
 	#define SDMMC1_EN           1
 	#define USB_DISK_EN         1
 	#define USB_PC_EN           1
-#endif
+
 
 
 /********************************************************************************/
@@ -264,11 +259,7 @@
  *           --------FM MACRO
  */
 ///<标准SDK
-#if (BT_STEREO == 1)
-	#define FM_RADIO_EN         0
-#else
-    #define FM_RADIO_EN         1
-#endif
+#define FM_RADIO_EN         1
 
 ///dependency
 #if (FM_RADIO_EN == 1)
@@ -355,33 +346,16 @@
  *           --------UI MACRO
  */
 ///<UI_显示
-#if (RCSP_LIGHT_HW == 1)
-#define UI_ENABLE                0
-#else
-#define UI_ENABLE                1
-#endif
+#define UI_ENABLE            1
 ///dependency
-#if (UI_ENABLE == 1)
-    #define LCD_128X64_EN        1      ///<lcd 支持
-    #define LED_7_EN             0      ///<led 支持
-#else
-    ///都不支持
-    #define LCD_128X64_EN        0
-    #define LED_7_EN             0
-#endif
-#if ((LCD_128X64_EN == 1) && (LED_7_EN == 1))
-#error  "UI driver support only one"
-#endif
+#define LCD_128X64_EN        1      ///<lcd 支持
+#define LED_7_EN             0      ///<led 支持
 
-#if (LCD_128X64_EN == 1)
-    ///菜单显示
-    #define LCD_SUPPORT_MENU     0
-    ///LRC歌词显示
-    #define LRC_LYRICS_EN        1
-#else
-    #define LCD_SUPPORT_MENU     0
-    #define LRC_LYRICS_EN        0
-#endif
+///菜单显示
+#define LCD_SUPPORT_MENU     0
+///LRC歌词显示
+#define LRC_LYRICS_EN        1
+
 
 /********************************************************************************/
 

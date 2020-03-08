@@ -6,7 +6,7 @@
 extern REVERB_API_STRUCT * bt_reverb;
 #if 1
 
-#if LED_7_EN
+#if 0
 void ui_open_bt_led(void *buf,u32 len)
 {
     puts("ui_open_bt_led\n");
@@ -19,7 +19,7 @@ void ui_open_bt_led(void *buf,u32 len)
 }
 #endif
 
-#if LCD_128X64_EN
+#if 1
 void ui_open_bt_lcd(void *buf,u32 len)
 {
     puts("ui_open_bt_lcd\n");
@@ -35,17 +35,17 @@ void ui_open_bt_lcd(void *buf,u32 len)
 void ui_open_bt(void *buf,u32 len)
 {
 
-#if UI_ENABLE
+#if 1
 
-#if LED_7_EN
+#if 0
     ui_open_bt_led(buf,len);
 #endif
 
-#if LCD_128X64_EN
+#if 1
     ui_open_bt_lcd(buf,len);
 #endif
 
-#endif/*UI_ENABLE*/
+#endif/*1*/
 }
 
 void ui_close_bt(void)

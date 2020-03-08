@@ -5,8 +5,8 @@
                             AD°´¼ü±í
 *******************************************************************/
 #define ADKEY_IDLE_SHORT		\
-                        /*00*/    MSG_IDLE_CTL,\
-                        /*01*/    NO_MSG,\
+                        /*00*/    MSG_CHANGE_WORKMODE,\
+                        /*01*/    MSG_IDLE_CTL,\
                         /*02*/    NO_MSG,\
                         /*03*/    NO_MSG,\
                         /*04*/    NO_MSG,\

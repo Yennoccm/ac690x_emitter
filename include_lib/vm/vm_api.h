@@ -32,10 +32,10 @@ enum
     VM_PC_VOL,
     VM_FM_INFO,
 	VM_PHONE_VOL,
-	VM_BT_STEREO_INFO,
+	VM_0_INFO,
 	VM_REMOTE_BD_ADDR,
 //------VM_PHONE_VOL此项前禁止修改-----//
-	
+
     VM_MAX_INDEX,
 };
 

@@ -6,7 +6,7 @@
 #include "common/list.h"
 #include "sdk_cfg.h"
 
-#if BT_STEREO
+#if 0
 	#define SYS_Hz			120000000L
 #else
 	#if BT_KTV_EN

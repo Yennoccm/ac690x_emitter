@@ -11,7 +11,7 @@
 #include "ui/ui_common.h"
 #include "ui/ui_api.h"
 
-#if UI_ENABLE
+#if 1
 
 const u8 asc_number[] = "0123456789";    ///<0~9µÄASCIIÂë±í
 

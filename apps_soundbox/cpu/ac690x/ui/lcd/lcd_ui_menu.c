@@ -17,7 +17,7 @@
 #include "ui/lcd/lcd_drv_api.h"
 #include "ui/lcd/lcd_drv_interface.h"
 
-#if  LCD_SUPPORT_MENU//LCD_128X64_EN
+#if  LCD_SUPPORT_MENU//1
 
 #define LCD_MENU_OPT_DBG
 #ifdef  LCD_MENU_OPT_DBG
@@ -240,13 +240,13 @@ static const u8 main_app_img_group[][2] =
 
     {   DVcRzImg4_10,DVcRzImg12_10},//music
 
-#if FM_RADIO_EN
+#if 1
     {   DVcRzImg5_10,DVcRzImg13_10},//fm
 #endif
 
     {   DVcRzImg6_10,DVcRzImg14_10},//line in
 
-#if USB_PC_EN
+#if 1
     {   DVcRzImg7_10,DVcRzImg15_10},//pc
 #endif
 
@@ -267,13 +267,13 @@ static const char main_app_name_group[][16] =
     {   "   ¿∂—¿"}, //0
 
     {   "   “Ù¿÷"}, //1
-#if FM_RADIO_EN
+#if 1
     {   "    ’“Ù"}, //2
 #endif
 
     {   "  “Ù∆µ ‰»Î"}, //3
 
-#if USB_PC_EN
+#if 1
     {   "  µÁƒ‘¡¨Ω”"}, //4
 #endif
 
@@ -301,13 +301,13 @@ static const u8 main_menu_id_group[] =
 
     MENU_TASK_MUSIC_APP, //1
 
-#if FM_RADIO_EN
+#if 1
     MENU_TASK_RADIO_APP, //2
 #endif
 
     MENU_TASK_LINEIN_APP, //3
 
-#if USB_PC_EN
+#if 1
     MENU_TASK_UDISK_APP, //4
 #endif
 

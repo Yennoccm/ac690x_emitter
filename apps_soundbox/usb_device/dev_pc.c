@@ -10,7 +10,7 @@
 #include "sdk_cfg.h"
 #include "dac/ladc.h"
 
-#if USB_PC_EN
+#if 1
 
 #define USB_PC_PROTECT_EN	0
 

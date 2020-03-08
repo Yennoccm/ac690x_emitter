@@ -20,53 +20,53 @@
 #else
 
 #define ADKEY_DECODE_SHORT		\
-                        /*00*/    MSG_MUSIC_PP,\
-                        /*01*/    MSG_MUSIC_NEXT_FILE,\
-                        /*02*/    MSG_MUSIC_PREV_FILE,\
-                        /*03*/    MSG_MUSIC_EQ,\
-                        /*04*/    MSG_MUSIC_RPT,\
-                        /*05*/    MSG_MUSIC_U_SD,\
-                        /*06*/    MSG_MUSIC_AB_RPT,\
-                        /*09*/    MSG_MUSIC_DEL_FILE,\
-                        /*07*/    MSG_ECHO_START,\
-                        /*08*/    MSG_REC_START,
+                        /*00*/    NO_MSG,\
+                        /*01*/    MSG_MUSIC_FR,\
+                        /*02*/    MSG_MUSIC_FF,\
+                        /*03*/    NO_MSG,\
+                        /*04*/    NO_MSG,\
+                        /*05*/    MSG_MUSIC_PP,\
+                        /*06*/    MSG_MUSIC_PREV_FILE,\
+                        /*09*/    MSG_MUSIC_NEXT_FILE,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 #endif //#if LCD_SUPPORT_MENU
 
 #define ADKEY_DECODE_LONG		\
                         /*00*/    MSG_CHANGE_WORKMODE,\
-                        /*01*/    MSG_VOL_UP,\
-                        /*02*/    MSG_VOL_DOWN,\
-                        /*03*/    MSG_MUSIC_FR,\
-                        /*04*/    MSG_MUSIC_FF,\
-                        /*05*/    NO_MSG,\
-                        /*06*/    NO_MSG,\
-                        /*06*/    NO_MSG,\
-                        /*07*/    MSG_ECHO_STOP,\
-                        /*08*/    MSG_REC_STOP,
+                        /*01*/    MSG_MUSIC_FR,\
+                        /*02*/    MSG_MUSIC_FF,\
+                        /*03*/    NO_MSG,\
+                        /*04*/    NO_MSG,\
+                        /*05*/    MSG_MUSIC_PP,\
+                        /*06*/    MSG_MUSIC_PREV_FILE,\
+                        /*09*/    MSG_MUSIC_NEXT_FILE,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 #define ADKEY_DECODE_HOLD		\
                         /*00*/    NO_MSG,\
-                        /*01*/    MSG_VOL_UP,\
-                        /*02*/    MSG_VOL_DOWN,\
-                        /*03*/    MSG_MUSIC_FR,\
-                        /*04*/    MSG_MUSIC_FF,\
-                        /*05*/    NO_MSG,\
-                        /*06*/    NO_MSG,\
-                        /*07*/    NO_MSG,\
-                        /*08*/    NO_MSG,\
-                        /*09*/    NO_MSG,
+                        /*01*/    MSG_MUSIC_FR,\
+                        /*02*/    MSG_MUSIC_FF,\
+                        /*03*/    NO_MSG,\
+                        /*04*/    NO_MSG,\
+                        /*05*/    MSG_MUSIC_PP,\
+                        /*06*/    MSG_MUSIC_PREV_FILE,\
+                        /*09*/    MSG_MUSIC_NEXT_FILE,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 #define ADKEY_DECODE_LONG_UP	\
                         /*00*/    NO_MSG,\
-                        /*01*/    NO_MSG,\
-                        /*02*/    NO_MSG,\
+                        /*01*/    MSG_MUSIC_FR,\
+                        /*02*/    MSG_MUSIC_FF,\
                         /*03*/    NO_MSG,\
                         /*04*/    NO_MSG,\
-                        /*05*/    NO_MSG,\
-                        /*06*/    NO_MSG,\
-                        /*07*/    NO_MSG,\
-                        /*08*/    NO_MSG,\
-                        /*09*/    NO_MSG,
+                        /*05*/    MSG_MUSIC_PP,\
+                        /*06*/    MSG_MUSIC_PREV_FILE,\
+                        /*09*/    MSG_MUSIC_NEXT_FILE,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 const u8 music_ad_table[4][10] =
 {

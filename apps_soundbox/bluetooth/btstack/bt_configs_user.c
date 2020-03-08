@@ -5,6 +5,7 @@
 #include "vm/vm_api.h"
 #include "common/msg.h"
 #include "sdk_cfg.h"
+#include "global_var.h"
 #include "clock.h"
 #include "ui/led/led.h"
 #include "key_drv/key_drv_ad.h"
@@ -19,7 +20,6 @@
 #include "uart_param.h"
 
 extern volatile u8 low_power_flag;
-
 static void in_low_pwr_port_deal(u8 mode) sec(.poweroff_text);
 static void in_low_pwr_port_deal(u8 mode)
 {
@@ -125,8 +125,8 @@ static void low_pwr_deal(u8 mode,u32 timer_ms)
 }
 
 ///---sdp service record profile- 用户选择支持协议--///
-#define USER_SUPPORT_PROFILE_SPP    1
-#define USER_SUPPORT_PROFILE_HFP    1
+#define USER_SUPPORT_PROFILE_SPP    0
+#define USER_SUPPORT_PROFILE_HFP    0
 #define USER_SUPPORT_PROFILE_A2DP   1
 #define USER_SUPPORT_PROFILE_AVCTP  1
 #define USER_SUPPORT_PROFILE_HID    0
@@ -165,7 +165,7 @@ static void bt_save_stereo_info(u8 stereo_type)
 {
 	u8 stereo_info;
     stereo_info = stereo_type;
-    vm_write_api(VM_BT_STEREO_INFO,&stereo_info );
+    vm_write_api(VM_0_INFO,&stereo_info );
 	printf("------stereo_info=0x%x\n",stereo_info );
 }
 
@@ -207,15 +207,17 @@ extern void __bt_set_background_conn_type_flag(u8 flag);
 char pin_code_list[10][4] =
 {
 	{'0','0','0','0'},
+    {'1','1','1','1'},
+    {'9','9','9','9'},
 	{'1','2','3','4'},
-	{'8','8','8','8'},
-	{'1','3','1','4'},
 	{'4','3','2','1'},
-	{'1','1','1','1'},
 	{'2','2','2','2'},
 	{'3','3','3','3'},
 	{'4','4','4','4'},
-	{'5','5','5','5'}
+	{'5','5','5','5'},
+	{'6','6','6','6'},
+	{'7','7','7','7'},
+	{'8','8','8','8'},
 };
 
 static void bt_function_select_init()
@@ -240,7 +242,7 @@ static void bt_function_select_init()
     __bt_set_update_battery_time(10000); /*设置电量显示发送更新的周期时间，为0表示关闭电量显示功能，单位毫秒，u32, 不能小于5000ms*/
     __bt_set_a2dp_auto_play_flag(0); /*高级音频连接完成自动播放歌曲使能, 0不使能，1使能*/
     __set_simple_pair_flag(1);       /*提供接口外部设置配对方式,1使能简易配对。0使用pin code, 会使用配置文件的值*/
-#if BT_STEREO
+#if 0
     __set_user_ctrl_conn_num(2);     /*用户设置支持连接的个数，1 或 2*/
     __set_auto_conn_device_num(2);   /*该接口用于设置上电回连需要依次搜索设备的个数。0表示上电不回连。大于20无效，直到连上一个*/
     __set_stereo_device_indicate("MO");/*设置对箱搜索标识,support两个字符标识，inquiry时候用,搜索到相应的标识才允许连接*/
@@ -254,7 +256,7 @@ static void bt_function_select_init()
     __set_auto_conn_device_num(1);   /*该接口用于设置上电回连需要依次搜索设备的个数。0表示上电不回连。大于20无效，直到连上一个*/
 #endif
     __set_page_timeout_value(5000); /*回连搜索时间长度设置,可使用该函数注册使用，ms单位,u16*/
-	__set_sbc_cap_bitpool(53);//38 
+	__set_sbc_cap_bitpool(53);//38
 #if BT_HID_INDEPENDENT_MODE
     __set_hid_auto_disconn_en(0);    /*是否自动断开手机的HID连接,1会断开，0是保留HID连接*/
 #else
@@ -267,7 +269,7 @@ static void bt_function_select_init()
 	__bt_set_music_back_play_flag(1);
     __set_music_break_in_flag(1);  /* 音频抢断开关，0：不抢断，1：抢断*/
     __set_hfp_switch(1);             /*通话抢断开关，0：不抢断，1：抢断*/
-#if BT_STEREO
+#if 0
 	__bt_set_background_conn_type_flag(0);
 #else
 	__bt_set_background_conn_type_flag(1);
@@ -305,6 +307,9 @@ static void bt_read_remote_name(u8 *name)
 {
     puts("\n remote name : ");
     puts((char *)name);
+    char* src=(char*)name;
+    char* dist=(char *)global_device_name;
+    for(int i=0;i!=15&&(*dist++=*src++);++i);
     puts("\n");
 }
 
@@ -375,7 +380,7 @@ static void spp_rcsp_data_deal(u8 packet_type, u16 channel, u8 *packet, u16 size
  			 rcsp_event_com_start(RCSP_APP_TYPE_SPP);
              rcsp_register_comsend(bt_spp_send_data);
              break;
-        
+
 		case 2:
              //连接断开
              puts("spp disconnect\n");
@@ -385,7 +390,7 @@ static void spp_rcsp_data_deal(u8 packet_type, u16 channel, u8 *packet, u16 size
 #endif
 			 spp_mutex_del();
              break;
-        
+
 		case 7://DATA
             ///puts("SP ");
             rcsp_comdata_recieve(packet,size);
@@ -404,11 +409,11 @@ static void set_device_volume(int volume )
     if(is_dac_mute()) {
    		dac_mute(0,1);
     }
-#if BT_STEREO
+#if 0
 	if(!is_check_stereo_slave())
 	{
 		stereo_host_cmd_handle(MSG_VOL_STEREO,dac_ctl.sys_vol_r);
-			
+
 	}
 #endif
     set_sys_vol(dac_ctl.sys_vol_l, dac_ctl.sys_vol_r, FADE_ON);
@@ -549,7 +554,7 @@ static u8 bt_get_macro_value(BT_STACK_MACRO type)
         case BT_TRIM_MODE:
 #if(BT_MODE == NORMAL_MODE)
             return BT_TRIM_ONCE;//BT_TRIM_ALWAYS
-#else 
+#else
 			return BT_TRIM_ALWAYS;
 #endif
 		case BT_ESCO_FILTER_LEVEL:
@@ -641,8 +646,8 @@ static void bredr_handle_register()
 	bt_chip_io_type_setting(RTCVDD_TYPE , BTAVDD_TYPE);
 	bt_set_noconnect_lowpower_fun(1,pwr_timer_in,pwr_timer_out);/*设置没有连接的时候是否进入低功耗模式*/
 	esco_handle_register(get_esco_st);
-#if BT_STEREO	
-	bt_stereo_register(bt_save_stereo_info,stereo_sys_vol_sync,stereo_deal_cmd);  /*对箱接口*/
+#if 0
+	0_register(bt_save_stereo_info,stereo_sys_vol_sync,stereo_deal_cmd);  /*对箱接口*/
 #else
 	bt_stereo_register(NULL,NULL,NULL);  /*对箱接口*/
 #endif
@@ -655,7 +660,7 @@ static void ble_handle_register()
 /*不属于用户接口，协议栈回调函数*/
 extern void bt_osc_internal_cfg(u8 sel_l,u8 sel_r);
 extern void app_server_init(void);
-#if BT_STEREO
+#if 0
 static u8 rx_mem[10*1024] sec(.bt_classic_data);
 static u8 tx_mem[5*1024] sec(.bt_classic_data);
 #else
@@ -680,11 +685,11 @@ void bt_app_cfg()
 
     __set_ble_bredr_mode(BLE_BREDR_MODE);    /*bt enble BT_BLE_EN|BT_BREDR_EN */
 
-#if BT_STEREO
+#if 0
     __set_stereo_mode(1);
 #else
     __set_stereo_mode(0);
-#endif // BT_STEREO
+#endif // 0
 
 	set_bt_config_check_callback(bt_info_init);   //    bt_info_init();[>读取flash的配置文件<]
 #if (BLE_BREDR_MODE&BT_BREDR_EN)

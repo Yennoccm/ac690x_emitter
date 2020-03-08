@@ -9,7 +9,7 @@
 /*----------------------------------------------------------------------------*/
 #include "ui/ui_api.h"
 
-#if UI_ENABLE
+#if 1
 
 #include "ui/ui_common.h"
 #include "ui/led/led7_drv.h"

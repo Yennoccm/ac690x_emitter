@@ -6,7 +6,7 @@
 #include "ui/ui_api.h"
 #include "common/common.h"
 
-#if LCD_128X64_EN
+#if 1
 
 ///LCD ≥ı ºªØ√¸¡Ó±Ì
 const u8 lcd_init_table[] =
@@ -84,5 +84,5 @@ void lcd_hardware_init(void)
     ui_puts("lcd_hardware_init OK\n");
 }
 
-#endif/*LCD_128X64_EN*/
+#endif/*1*/
 

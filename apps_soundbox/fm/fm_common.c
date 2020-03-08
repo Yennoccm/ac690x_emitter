@@ -6,7 +6,7 @@
 #include "fm_prompt.h"
 #include "common/common.h"
 
-#if FM_RADIO_EN
+#if 1
 
 /*----------------------------------------------------------------------------*/
 /**@brief   获取一个byte中有几个位被置一

@@ -120,13 +120,13 @@ typedef enum
 	TASK_LIGHT_APP_ENUM,
 #endif
 
-#if FM_RADIO_EN
+#if 1
     TASK_RADIO_APP_ENUM,
 #endif
 
     TASK_LINEIN_APP_ENUM,
 
-#if USB_PC_EN
+#if 1
     TASK_UDISK_APP_ENUM,
 #endif
 
@@ -143,11 +143,11 @@ typedef enum
 #define TASK_LIGHT_APP     TASK_LIGHT_APP_ENUM
 #endif
 
-#if FM_RADIO_EN
+#if 1
 #define TASK_RADIO_APP     TASK_RADIO_APP_ENUM
 #endif
 
-#if USB_PC_EN
+#if 1
 #define TASK_UDISK_APP     TASK_UDISK_APP_ENUM
 #endif
 
@@ -221,8 +221,8 @@ extern s8 rcsp_user_eq_seg_gain[6][10];
 extern s8 user_eq_seg_gain_default[6][10];
 extern s8 user_eq_global_gain_default[6];
 extern const s8 user_eq_global_gain_default_all0[6];
-extern const u8 rcspEQ_to_sysEQ_talbe[6]; 
-extern const u8 sysEQ_to_rcspEQ_talbe[6]; 
+extern const u8 rcspEQ_to_sysEQ_talbe[6];
+extern const u8 sysEQ_to_rcspEQ_talbe[6];
 
 extern const u8 rcsp_vol_max_value;
 extern u8  rcsp_eq_sw_flag;

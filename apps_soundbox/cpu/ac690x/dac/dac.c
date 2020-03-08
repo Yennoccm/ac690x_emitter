@@ -110,21 +110,21 @@ void dac_int_enable(void)
 {
 	dac_read_en = 0;
 	dac_ie_api(1);
-#if BT_STEREO
+#if 0
 		dac_mute(0,0);
 #else
-		dac_mute(0,1);	
+		dac_mute(0,1);
 #endif
-	
+
 }
 void dac_int_disable(void)
 {
-#if BT_STEREO
+#if 0
 		dac_mute(1,0);
 #else
-		dac_mute(1,1);	
+		dac_mute(1,1);
 #endif
-	
+
 	dac_ie_api(0);
 }
 
@@ -193,7 +193,7 @@ int dac_cbuf_enough(void)
 		 {
 			 return 1;
 		 }
-	 	
+
 	 }
 }
 extern void bt_rec_get_data(s16 *buf,u32 len);//录音获取pcm数据函数
@@ -216,7 +216,7 @@ void dac_isr_callback(void *dac_buf,u8 buf_flag)
 	return;
 #endif
 
-#if BT_STEREO
+#if 0
       inc_dac_cnt(32);
 #endif
 	if(0 == dac_read_en)
@@ -231,7 +231,7 @@ void dac_isr_callback(void *dac_buf,u8 buf_flag)
 #if BT_EMITTER_EN
 			if(get_emitter_role() == BD_ROLE_HOST) {
 				if(music_task_runing) {
-					a2dp_send_media_to_sbc_encoder((u32*)read_buf,2*DAC_SAMPLE_POINT,44100,2);	
+					a2dp_send_media_to_sbc_encoder((u32*)read_buf,2*DAC_SAMPLE_POINT,44100,2);
 				}
 			}
 #endif
@@ -293,7 +293,7 @@ void dac_isr_callback(void *dac_buf,u8 buf_flag)
 #if BT_EMITTER_EN
 	if(get_emitter_role() == BD_ROLE_HOST) {
 		if(music_task_runing) {
-			a2dp_send_media_to_sbc_encoder((u32*)read_buf,2*DAC_SAMPLE_POINT,44100,2);	
+			a2dp_send_media_to_sbc_encoder((u32*)read_buf,2*DAC_SAMPLE_POINT,44100,2);
 		}
 	}
 #endif
@@ -354,7 +354,7 @@ void audio_init(void)
 	echo_set_vol(MAX_SYS_VOL_L);
 #endif
 
-#if VCOMO_EN   
+#if VCOMO_EN
     dac_init_api(VCOMO_EN, LDO_SLECT, DAC_CHANNEL_SLECT,DAC_ISEL_THIRD);
 #else
     dac_init_api(VCOMO_EN, LDO_SLECT, DAC_CHANNEL_SLECT,DAC_ISEL5U);

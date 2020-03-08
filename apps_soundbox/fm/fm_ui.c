@@ -4,11 +4,11 @@
 #include "fm/fm_radio.h"
 #include "echo/echo_api.h"
 
-#if FM_RADIO_EN
+#if 1
 
 extern void *fm_reverb;
 
-#if LED_7_EN
+#if 0
 void ui_open_fm_led(void *buf,u32 len)
 {
     puts("ui_open_aux_led\n");
@@ -20,7 +20,7 @@ void ui_open_fm_led(void *buf,u32 len)
 }
 #endif
 
-#if LCD_128X64_EN
+#if 1
 void ui_open_fm_lcd(void *buf,u32 len)
 {
     puts("ui_open_fm_lcd\n");
@@ -36,9 +36,9 @@ void ui_open_fm_lcd(void *buf,u32 len)
 void ui_open_fm(void *buf,u32 len)
 {
     //puts("open fm ui\n");
-#if UI_ENABLE
+#if 1
 
-#if LED_7_EN
+#if 0
     ui_open_fm_led(buf, len);
 #endif
 
@@ -46,7 +46,7 @@ void ui_open_fm(void *buf,u32 len)
     ui_open_fm_seg(buf, len);
 #endif
 
-#if LCD_128X64_EN
+#if 1
     ui_open_fm_lcd(buf, len);
 #endif
 
@@ -54,7 +54,7 @@ void ui_open_fm(void *buf,u32 len)
     ui_open_fm_tft(buf, len);
 #endif
 
-#endif/*UI_ENABLE*/
+#endif/*1*/
 }
 
 void ui_close_fm(void)

@@ -6,7 +6,7 @@
 #include "ui/lcd/lcd_spi.h"
 #include "uicon/dc_showres.h"
 
-#if LCD_128X64_EN
+#if 1
 
 //全局变量
 volatile bool lcd_busy;         ///<LCD硬件忙标记
@@ -270,5 +270,5 @@ void lcd_draw(u8 start_page, u8 page_len, u8 * pbuf)
 {
 }
 
-#endif/*LCD_128x64_EN*/
+#endif/*1*/
 

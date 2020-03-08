@@ -20,42 +20,42 @@
 #else
 
 #define ADKEY_AUX_SHORT		\
-                        /*00*/    MSG_AUX_MUTE,\
+                        /*00*/    MSG_CHANGE_WORKMODE,\
                         /*01*/    NO_MSG,\
                         /*02*/    NO_MSG,\
-                        /*03*/    MSG_MUSIC_EQ,\
+                        /*03*/    NO_MSG,\
                         /*04*/    NO_MSG,\
-                        /*05*/    NO_MSG,\
+                        /*05*/    MSG_AUX_MUTE,\
                         /*06*/    NO_MSG,\
                         /*06*/    NO_MSG,\
-                        /*07*/    MSG_ECHO_START,\
-                        /*08*/    MSG_REC_START,
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 #endif //#if LCD_SUPPORT_MENU
 
 #define ADKEY_AUX_LONG		\
                         /*00*/    MSG_CHANGE_WORKMODE,\
-                        /*01*/    MSG_VOL_UP,\
-                        /*02*/    MSG_VOL_DOWN,\
+                        /*01*/    NO_MSG,\
+                        /*02*/    NO_MSG,\
                         /*03*/    NO_MSG,\
                         /*04*/    NO_MSG,\
-                        /*05*/    NO_MSG,\
+                        /*05*/    MSG_AUX_MUTE,\
                         /*06*/    NO_MSG,\
                         /*06*/    NO_MSG,\
-                        /*07*/    MSG_ECHO_STOP,\
-                        /*08*/    MSG_REC_STOP,
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 #define ADKEY_AUX_HOLD		\
                         /*00*/    NO_MSG,\
-                        /*01*/    MSG_VOL_UP,\
-                        /*02*/    MSG_VOL_DOWN,\
+                        /*01*/    NO_MSG,\
+                        /*02*/    NO_MSG,\
                         /*03*/    NO_MSG,\
                         /*04*/    NO_MSG,\
-                        /*05*/    NO_MSG,\
+                        /*05*/    MSG_AUX_MUTE,\
                         /*06*/    NO_MSG,\
-                        /*07*/    NO_MSG,\
-                        /*08*/    NO_MSG,\
-                        /*09*/    NO_MSG,
+                        /*06*/    NO_MSG,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 #define ADKEY_AUX_LONG_UP	\
                         /*00*/    NO_MSG,\
@@ -63,11 +63,11 @@
                         /*02*/    NO_MSG,\
                         /*03*/    NO_MSG,\
                         /*04*/    NO_MSG,\
-                        /*05*/    NO_MSG,\
+                        /*05*/    MSG_AUX_MUTE,\
                         /*06*/    NO_MSG,\
-                        /*07*/    NO_MSG,\
-                        /*08*/    NO_MSG,\
-                        /*09*/    NO_MSG,
+                        /*06*/    NO_MSG,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 const u8 linein_ad_table[4][10] =
 {

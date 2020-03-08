@@ -12,7 +12,7 @@ extern A_B_REPEAT_OBJ ab_rept;
 
 //extern REVERB_API_STRUCT * music_reverb;
 
-#if LED_7_EN
+#if 0
 void ui_open_music_led(void *buf,u32 len)
 {
     puts("ui_open_music_led\n");
@@ -23,7 +23,7 @@ void ui_open_music_led(void *buf,u32 len)
 }
 #endif
 
-#if LCD_128X64_EN
+#if 1
 void ui_open_music_lcd(void *buf,u32 len)
 {
     puts("ui_open_music_lcd\n");
@@ -39,8 +39,8 @@ void ui_open_music_lcd(void *buf,u32 len)
 		else
 		{
 			music_name_buf.file_name = (LONG_FILE_NAME*) (music_name_buf.tpath + 128);
-			music_name_buf.dir_name = (LONG_FILE_NAME*) (music_name_buf.tpath + 128 + ALIGN_4BYTE(sizeof(LONG_FILE_NAME)));	
-		}	
+			music_name_buf.dir_name = (LONG_FILE_NAME*) (music_name_buf.tpath + 128 + ALIGN_4BYTE(sizeof(LONG_FILE_NAME)));
+		}
 	}
 	else
 	{
@@ -58,9 +58,9 @@ void ui_open_music_lcd(void *buf,u32 len)
 void ui_open_music(void *buf, u32 len)
 {
     //puts("open aux ui\n");
-    
-   
-#if UI_ENABLE
+
+
+#if 1
 
     music_ui.ui_file_info = &music_name_buf;
     music_ui.eq_mode = &eq_mode;
@@ -74,7 +74,7 @@ void ui_open_music(void *buf, u32 len)
     music_ui.ab_statu = (void*)&ab_rept.statu;
 #endif
 
-#if LED_7_EN
+#if 0
     ui_open_music_led(buf, len);
 #endif
 
@@ -82,7 +82,7 @@ void ui_open_music(void *buf, u32 len)
     ui_open_music_seg(buf, len);
 #endif
 
-#if LCD_128X64_EN
+#if 1
     ui_open_music_lcd(buf, len);
 #endif
 
@@ -90,7 +90,7 @@ void ui_open_music(void *buf, u32 len)
     ui_open_music_tft(buf, len);
 #endif
 
-#endif/*UI_ENABLE*/
+#endif/*1*/
 
 }
 

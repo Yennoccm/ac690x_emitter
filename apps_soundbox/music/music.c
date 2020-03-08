@@ -118,7 +118,7 @@ int music_decoder_init(MUSIC_OP_API **mapi_out)
             err_id = 3;
             break;
         }
-	
+
         mapi->dop_api->dec_api.type_enable = DEC_PHY_MP3 | DEC_PHY_WAV |  \
 											 DEC_PHY_WMA | DEC_PHY_FLAC | \
 											 DEC_PHY_APE ;//使能响应的解码库
@@ -293,7 +293,7 @@ u32 music_play_api(MUSIC_OP_API *m_op_api,ENUM_DEV_SEL_MODE dev_sel,u32 dev_let,
 	rcsp_music_play_api_after(dev_sel,dev_let,err);
 #endif
 
-#if UI_ENABLE
+#if 1
     u8  last_device = music_ui.ui_curr_device;
     if((err != 0)&&(err != SUCC_MUSIC_START_DEC))
     {
@@ -309,7 +309,7 @@ u32 music_play_api(MUSIC_OP_API *m_op_api,ENUM_DEV_SEL_MODE dev_sel,u32 dev_let,
 		music_ui.ui_total_file =m_op_api->fop_api->cur_lgdev_info->total_file_num;
 		// music_ui.ui_total_file = (u32)file_operate_ctl(FOP_GET_TOTALFILE_NUM,m_op_api->fop_api,m_op_api->dop_api->file_type,0);//reflash
 
-		music_ui.play_time = get_decode_time(); 
+		music_ui.play_time = get_decode_time();
 		if(PLAY_BREAK_POINT == file_sel)
 		{
 			//断点播放，等待正确时间更新，避免显示00:00
@@ -317,7 +317,7 @@ u32 music_play_api(MUSIC_OP_API *m_op_api,ENUM_DEV_SEL_MODE dev_sel,u32 dev_let,
 			while(music_ui.play_time == 0)
 			{
 				os_time_dly(1);
-				music_ui.play_time = get_decode_time(); 
+				music_ui.play_time = get_decode_time();
 
 				time_out++;
 				/* puts("time_out\n"); */
@@ -329,7 +329,7 @@ u32 music_play_api(MUSIC_OP_API *m_op_api,ENUM_DEV_SEL_MODE dev_sel,u32 dev_let,
 			/* printf("----ui_play_time= %d\n",music_ui.play_time); */
 		}
 
-#if LCD_128X64_EN
+#if 1
 		music_file_info(m_op_api);//get_file_info
 #endif
     	music_ui.opt_state = MUSIC_OPT_BIT_PLAY;
@@ -372,15 +372,15 @@ u32  music_play_by_PathClust(MUSIC_OP_API *mapi,u8 *path_clust,u8 path_len)
 {
     u32 err;
     u8 *path_buf = malloc(path_len);
-    
+
 	if(path_buf == NULL)
 	{
 		return ERR_MUSIC_NULL_OPT;
 	}
-	memcpy(path_buf,path_clust,path_len);	
+	memcpy(path_buf,path_clust,path_len);
 	mapi->fop_api->fop_init->filepath = (u8*)path_buf;
     err = music_play_api(mapi,DEV_SEL_SPEC,0,PLAY_FILE_BYPATH,&(mapi->dop_api->file_num));
-    free(path_buf); 
+    free(path_buf);
 	return err;
 }
 #endif
@@ -451,7 +451,7 @@ static void music_task(void *p)
 
     music_reverb = NULL;
 
-   
+
     puts("\n************************music TASK********************\n");
 
 	/* reg_get_id3v2_buf(music_get_file_id3); */
@@ -513,7 +513,7 @@ static void music_task(void *p)
             case SYS_EVENT_PLAY_SEL_END:
 			case SYS_EVENT_BEGIN_DEC:
                 msg[0] = SYS_EVENT_PLAY_SEL_END;
-				goto play_sel_end;            	
+				goto play_sel_end;
 				break;
             case MSG_MUSIC_NEXT_FILE:
             case MSG_MUSIC_PREV_FILE:
@@ -522,7 +522,7 @@ static void music_task(void *p)
             case MSG_MUSIC_PAUSE:
                 msg[0] = NO_MSG;// SYS_EVENT_PLAY_SEL_END will come next msg;
             case SYS_EVENT_DEL_TASK: 				//请求删除music任务
-play_sel_end:      
+play_sel_end:
 				puts("\n----play_sel_stop------\n");
                 play_sel_stop();
                 psel_enable = 0;
@@ -714,7 +714,7 @@ play_sel_end:
             //    break;
 
         case MSG_MUSIC_PP:
-#if UI_ENABLE
+#if 1
             if (UI_var.bCurMenu == MENU_INPUT_NUMBER)
             {
                 os_taskq_post("MusicTask", 1 , MSG_INPUT_TIMEOUT);
@@ -776,13 +776,13 @@ play_sel_end:
 			{
 				msg[1] = 2;
 			}
-	   
+
 			/* msg[1] = get_decode_time(); */
 			/* if(msg[1] > 15) */
 			/* { */
 				/* msg[1] = 15; */
 			/* } */
-			
+
 			if (0 == dec_ff_fr(&mapi->dop_api->dec_api,PLAY_MOD_FB,msg[1]))
             {
                 music_ui.opt_state = (MUSIC_OPT_BIT_FR);
@@ -1070,7 +1070,7 @@ play_sel_end:
 				if(get_emitter_role() == BD_ROLE_HOST) {
 					if(OS_NO_ERR == os_taskq_post(MAIN_TASK_NAME,2,MSG_DELETE_TASK,MSG_MUSIC_DEV_OFFLINE)) {
 						wait_ok = 0;
-					}	
+					}
 				}
 				else {
 					if(OS_NO_ERR == os_taskq_post(MAIN_TASK_NAME, 1, MSG_CHANGE_WORKMODE))

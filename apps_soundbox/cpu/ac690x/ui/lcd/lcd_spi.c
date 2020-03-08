@@ -3,7 +3,7 @@
 #include "ui/ui_api.h"
 #include "ui/lcd/lcd_drv_api.h"
 
-#if LCD_128X64_EN
+#if 1
 
 #define WAIT_SPI1_OK()    while (!(JL_SPI2->CON & BIT(15)));JL_SPI2->CON |= BIT(14)
 
@@ -77,4 +77,4 @@ void spi_font_tab_read(u8 *buf, u32 addr, u32 len)
 {
 }
 
-#endif/*LCD_128x64_EN*/
+#endif/*1*/

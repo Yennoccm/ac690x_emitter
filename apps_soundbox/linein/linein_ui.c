@@ -8,7 +8,7 @@
 
 //extern REVERB_API_STRUCT * aux_reverb;
 
-#if LED_7_EN
+#if 0
 void ui_open_aux_led(void *buf,u32 len)
 {
     puts("ui_open_aux_led\n");
@@ -26,7 +26,7 @@ void ui_open_aux_led(void *buf,u32 len)
 }
 #endif
 
-#if LCD_128X64_EN
+#if 1
 void ui_open_aux_lcd(void *buf,u32 len)
 {
     puts("ui_open_aux_lcd\n");
@@ -42,9 +42,9 @@ void ui_open_aux_lcd(void *buf,u32 len)
 void ui_open_aux(void *buf, u32 len)
 {
     //puts("open aux ui\n");
-#if UI_ENABLE
+#if 1
 
-#if LED_7_EN
+#if 0
     ui_open_aux_led(buf, len);
 #endif
 
@@ -52,7 +52,7 @@ void ui_open_aux(void *buf, u32 len)
     ui_open_aux_seg(buf, len);
 #endif
 
-#if LCD_128X64_EN
+#if 1
     ui_open_aux_lcd(buf, len);
 #endif
 
@@ -60,7 +60,7 @@ void ui_open_aux(void *buf, u32 len)
     ui_open_aux_tft(buf, len);
 #endif
 
-#endif/*UI_ENABLE*/
+#endif/*1*/
 }
 
 void ui_close_aux(void)

@@ -2,7 +2,7 @@
 #include "fm_key.h"
 #include "common/msg.h"
 
-#if FM_RADIO_EN
+#if 1
 /*******************************************************************
                             AD°´¼ü±í
 *******************************************************************/
@@ -22,43 +22,43 @@
 #else
 
 #define ADKEY_FM_SHORT		\
-                        /*00*/    MSG_FM_PP,\
-                        /*01*/    MSG_FM_NEXT_STATION,\
-                        /*02*/    MSG_FM_PREV_STATION,\
-                        /*03*/    MSG_FM_NEXT_STEP,\
-                        /*04*/    MSG_FM_PREV_STEP,\
-                        /*05*/    NO_MSG,\
-                        /*06*/    NO_MSG,\
-                        /*09*/    MSG_FM_SCAN_ALL_INIT,\
-                        /*07*/    MSG_ECHO_START,\
-                        /*08*/    MSG_REC_START,
-                        
+                        /*00*/    NO_MSG,\
+                        /*01*/    NO_MSG,\
+                        /*02*/    NO_MSG,\
+                        /*03*/    MSG_FM_SCAN_ALL_UP,\
+                        /*04*/    MSG_FM_SCAN_ALL_DOWN,\
+                        /*05*/    MSG_FM_PP,\
+                        /*06*/    MSG_FM_PREV_STATION,\
+                        /*09*/    MSG_FM_NEXT_STATION,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
+
 #endif //#if LCD_SUPPORT_MENU
 
 
 #define ADKEY_FM_LONG		\
                         /*00*/    MSG_CHANGE_WORKMODE,\
-                        /*01*/    MSG_VOL_UP,\
-                        /*02*/    MSG_VOL_DOWN,\
-                        /*03*/    MSG_FM_SCAN_ALL_UP,\
-                        /*04*/    MSG_FM_SCAN_ALL_DOWN,\
-                        /*05*/    NO_MSG,\
-                        /*06*/    NO_MSG,\
-                        /*06*/    NO_MSG,\
-                        /*07*/    MSG_ECHO_STOP,\
-                        /*08*/    MSG_REC_STOP,
+                        /*01*/    MSG_FM_SCAN_ALL_INIT,\
+                        /*02*/    NO_MSG,\
+                        /*03*/    NO_MSG,\
+                        /*04*/    NO_MSG,\
+                        /*05*/    MSG_FM_PP,\
+                        /*06*/    MSG_FM_PREV_STATION,\
+                        /*09*/    MSG_FM_NEXT_STATION,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 #define ADKEY_FM_HOLD		\
                         /*00*/    NO_MSG,\
-                        /*01*/    MSG_VOL_UP,\
-                        /*02*/    MSG_VOL_DOWN,\
+                        /*01*/    NO_MSG,\
+                        /*02*/    NO_MSG,\
                         /*03*/    NO_MSG,\
                         /*04*/    NO_MSG,\
-                        /*05*/    NO_MSG,\
-                        /*06*/    NO_MSG,\
-                        /*07*/    NO_MSG,\
-                        /*08*/    NO_MSG,\
-                        /*09*/    NO_MSG,
+                        /*05*/    MSG_FM_PP,\
+                        /*06*/    MSG_FM_PREV_STATION,\
+                        /*09*/    MSG_FM_NEXT_STATION,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 #define ADKEY_FM_LONG_UP	\
                         /*00*/    NO_MSG,\
@@ -66,11 +66,11 @@
                         /*02*/    NO_MSG,\
                         /*03*/    NO_MSG,\
                         /*04*/    NO_MSG,\
-                        /*05*/    NO_MSG,\
-                        /*06*/    NO_MSG,\
-                        /*07*/    NO_MSG,\
-                        /*08*/    NO_MSG,\
-                        /*09*/    NO_MSG,
+                        /*05*/    MSG_FM_PP,\
+                        /*06*/    MSG_FM_PREV_STATION,\
+                        /*09*/    MSG_FM_NEXT_STATION,\
+                        /*07*/    MSG_VOL_DOWN,\
+                        /*08*/    MSG_VOL_UP,
 
 const u8 fm_ad_table[4][10] =
 {

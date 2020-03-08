@@ -27,7 +27,7 @@
 //2°¢œ‘ æøÿ÷∆
 #define UI_RETURN       5
 
-#if UI_ENABLE//0//
+#if 1//0//
     #define UI_menu(x)              ui_menu_reflash(x)//ui_menu_api(x)
     #define UI_menu_arg(x,y)    ui_menu_arg_do(x,y)
     #define UI_menu_mux(x,y)    ui_menu_spec(x,y)
@@ -53,9 +53,9 @@
     #define SET_UI_SYS_VOL(...)
     #define SET_UI_REC_OPT(...)
     #define SET_UI_ECHO_PT(...)
-	#define UI_GET_CUR_MENU()   
+	#define UI_GET_CUR_MENU()
 
-#endif/*UI_ENABLE*/
+#endif/*1*/
 
 
 enum

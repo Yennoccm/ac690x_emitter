@@ -7,7 +7,7 @@
 #include "uicon/menu.h"
 #include "ui/ui_api.h"
 
-#if LCD_128X64_EN
+#if 1
 
 #define LCD_MALLOC_EN	0
 
@@ -112,5 +112,5 @@ void lcd_init(void)
     lcd_clear();
 }
 
-#endif/*LCD_128x64_EN*/
+#endif/*1*/
 

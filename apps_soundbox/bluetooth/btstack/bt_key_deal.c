@@ -24,7 +24,7 @@
 #include "rcsp/rcsp_interface.h"
 #include "bluetooth/nfc_api.h"
 #include "emitter_user.h"
-
+#include "global_var.h"
 #define BT_REC_Hz  120000000L
 
 RECORD_OP_API * rec_bt_api = NULL;
@@ -64,7 +64,6 @@ extern u8 a2dp_get_status(void);
 extern bool get_sco_connect_status();
 extern void set_esco_sr(u16 sr);
 OS_MUTEX tone_manage_semp ; //= OS_MUTEX_INIT();
-u8 g_bt_conn_status = 0;
 
 void get_esco_st(u8 sw)//esco call back fun, get esco status, 0 off, 1 on
 {
@@ -282,7 +281,7 @@ void user_ctrl_prompt_tone_play(u8 status,void *ptr)
             }else
 #endif
             {
-#if BT_STEREO
+#if 0
                if(BT_CURRENT_CONN_PHONE==get_bt_current_conn_type())
                {
 				   puts("------BT_CURRENT_CONN_PHONE\n");
@@ -326,7 +325,7 @@ void user_ctrl_prompt_tone_play(u8 status,void *ptr)
             }else
 #endif
             {
-#if BT_STEREO
+#if 0
                if(BT_CURRENT_CONN_PHONE==get_bt_current_conn_type())
 			   {
 				   puts("----disconn BT_CURRENT_CONN_STEREO_MASTER\n");
@@ -411,7 +410,7 @@ u8 get_stereo_salve(u8 get_type)
 	}
 	else//从vm中获取对箱上次是做主机还是做从机
 	{
-        if (-VM_READ_NO_INDEX == vm_read_api(VM_BT_STEREO_INFO,&stereo_info))
+        if (-VM_READ_NO_INDEX == vm_read_api(VM_0_INFO,&stereo_info))
         {
      	   return BD_CONN_MODE;
         }
@@ -425,8 +424,8 @@ u8 get_stereo_salve(u8 get_type)
 }
 void bt_stereo_poweroff_togerther()
 {
-#if BT_STEREO
-#if BT_STEREO_POWEROFF_TOGETHER
+#if 0
+#if 0_POWEROFF_TOGETHER
    	if(is_check_stereo_slave())
    	{
        	stereo_slave_cmd_handle(MSG_POWER_OFF,0xff);
@@ -540,20 +539,9 @@ static void btstack_status_change_deal(void *ptr, u8 status)
 					//user_send_cmd_prepare(USER_CTRL_SEARCH_DEVICE,0,NULL);
 				   	break;
 			   }
-
-#if NFC_EN
-			   nfc_init();
-#endif
-
-#if BT_STEREO
-               bd_work_mode = get_stereo_salve(STEREO_SLAVE_WAIT_CON);
-#endif
                 if(bd_work_mode == BD_PAGE_MODE)/*初始化完成进入配对模式*/
                 {
                     led_fre_set(7,1);
-#if BT_STEREO
-                    stereo_clear_current_search_index();
-#endif
                     bt_page_scan(1);
                 }
                 else/*初始化完成进入回连模式*/
@@ -563,7 +551,7 @@ static void btstack_status_change_deal(void *ptr, u8 status)
 						os_time_dly(1);
 					}
 					dac_off_control(); */
-					bt_power_max(4);
+					bt_power_max(0xFF);
 					user_send_cmd_prepare(USER_CTRL_START_CONNECTION,0,NULL);
                     bt_page_scan(1);
 					led_fre_set(7,1);
@@ -722,7 +710,7 @@ u8 g_user_disconnect_bt = 0;
 static void btstack_key_handler(void *ptr,int *msg)
 {
        static u8 play_st_ctl = 0;
-#if BT_STEREO
+#if 0
     if(is_check_stereo_slave())
     {
         switch(msg[0])
@@ -745,7 +733,7 @@ static void btstack_key_handler(void *ptr,int *msg)
 #endif
 
 	switch(msg[0]){
-#if BT_STEREO
+#if 0
 #if EQ_EN
  	 	case  MSG_BT_SYNC_STEREO_EQ:
 			if(user_val->bt_eq_mode == 0)
@@ -762,7 +750,7 @@ static void btstack_key_handler(void *ptr,int *msg)
 			}
             os_taskq_post("btmsg", 2, MSG_BT_MUSIC_EQ,user_val->bt_eq_mode);
 			break;
- 	 	case  MSG_BT_STEREO_EQ:
+ 	 	case  MSG_0_EQ:
     		if(is_check_stereo_slave())
 			{
             	stereo_slave_cmd_handle(MSG_BT_MUSIC_EQ,0);
@@ -849,9 +837,9 @@ static void btstack_key_handler(void *ptr,int *msg)
              puts("MSG_BT_PAGE_SCAN\n");
              bt_page_scan(2);
              break;
-#if BT_STEREO
-        case MSG_BT_STEREO_SEARCH_DEVICE:
-             puts("MSG_BT_STEREO_SEARCH_DEVICE\n");
+#if 0
+        case MSG_0_SEARCH_DEVICE:
+             puts("MSG_0_SEARCH_DEVICE\n");
             user_send_cmd_prepare(USER_CTRL_SEARCH_DEVICE,0,NULL);
             break;
 #endif
@@ -862,7 +850,6 @@ static void btstack_key_handler(void *ptr,int *msg)
 			if(g_bt_conn_status) {
 				puts("please disconnect bt first\n");
 				break;
-
 			}
             led_fre_set(7,0);                                /*播歌慢闪*/
 			user_send_cmd_prepare(USER_CTRL_SEARCH_DEVICE,0,NULL);
@@ -882,50 +869,9 @@ static void btstack_key_handler(void *ptr,int *msg)
                 user_send_cmd_prepare(USER_CTRL_HFP_CALL_ANSWER,0,NULL);
             }
             break;
-
-        case MSG_BT_CALL_LAST_NO:
-            puts("MSG_BT_CALL_LAST_NO\n");
-            if(get_call_status()!=BT_CALL_HANGUP)
-                break;
-            if(get_last_call_type()== BT_CALL_OUTGOING)
-            {
-                user_send_cmd_prepare(USER_CTRL_HFP_CALL_LAST_NO,0,NULL);
-            }else if(get_last_call_type() == BT_CALL_INCOMING){
-                user_send_cmd_prepare(USER_CTRL_DIAL_NUMBER,user_val->phone_num_len,
-                                                            user_val->income_phone_num);
-            }
-            break;
-
-        case MSG_BT_CALL_REJECT:
-            puts("MSG_BT_CALL_REJECT\n");
-            if(get_call_status() != BT_CALL_HANGUP)
-            {
-                user_send_cmd_prepare(USER_CTRL_HFP_CALL_HANGUP,0,NULL);
-            }
-            break;
-
-        case MSG_BT_CALL_CONTROL:   //物理按键少的时候合用
-            if(get_call_status() != BT_CALL_HANGUP)
-            {
-                user_send_cmd_prepare(USER_CTRL_HFP_CALL_HANGUP,0,NULL);
-            }
-            else
-            {
-                if(get_last_call_type() == BT_CALL_OUTGOING)
-                {
-                    user_send_cmd_prepare(USER_CTRL_HFP_CALL_LAST_NO,0,NULL);
-                }else if(get_last_call_type() == BT_CALL_INCOMING){
-                    user_send_cmd_prepare(USER_CTRL_DIAL_NUMBER,user_val->phone_num_len,
-                                                                user_val->income_phone_num);
-                }
-            }
-            break;
-
         case MSG_BT_CONNECT_CTL:
             puts("MSG_BT_CONNECT_CTL\n");
-            if((BT_STATUS_CONNECTING == get_bt_connect_status())   ||
-               (BT_STATUS_TAKEING_PHONE == get_bt_connect_status())||
-               (BT_STATUS_PLAYING_MUSIC == get_bt_connect_status()))/*连接状态*/
+            if((BT_STATUS_CONNECTING == get_bt_connect_status())||(BT_STATUS_PLAYING_MUSIC == get_bt_connect_status()))/*连接状态*/
             {
                 puts("bt_disconnect\n");/*手动断开连接*/
 				g_user_disconnect_bt = 1;
@@ -933,28 +879,10 @@ static void btstack_key_handler(void *ptr,int *msg)
             }
             else
             {
-                puts("bt_connect\n");/*手动连接*/
+                puts("bt_manual_connect\n");/*手动连接*/
                 user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR_MANUALLY,0,NULL);
             }
             break;
-
-#if BT_STEREO
-		case MSG_BT_CONNECT_STEREO_CTL:
-            puts("MSG_BT_CONNECT_STEREO_CTL\n");
-            if((BT_STATUS_CONNECTING == get_stereo_bt_connect_status())   ||
-               (BT_STATUS_TAKEING_PHONE == get_stereo_bt_connect_status())||
-               (BT_STATUS_PLAYING_MUSIC == get_stereo_bt_connect_status()))/*连接状态*/
-            {
-                puts("bt_disconnect\n");/*手动对箱断开连接*/
-                user_send_cmd_prepare(USER_CTRL_DISCONNECTIO_STEREO_HCI,0,NULL);
-            }
-            else
-            {
-                puts("bt_connect\n");/*手动对箱连接*/
-                user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR_STEREO,0,NULL);
-            }
-			break;
-#endif
         case MSG_BT_HID_CTRL:
             puts("MSG_BT_HID_CTRL\n");
             if(get_curr_channel_state() & HID_CH)
@@ -1030,7 +958,7 @@ static void btstack_key_handler(void *ptr,int *msg)
             	puts("H");
 
 			}
-#if BT_STEREO
+#if 0
             if(0 == get_total_connect_dev() ){
                 if(user_val->discover_control_cnt == 1){
                     user_send_cmd_prepare(USER_CTRL_WRITE_SCAN_ENABLE,0,NULL);
@@ -1274,162 +1202,105 @@ void sys_time_auto_connection_caback(u8* addr)
 }
 
 /*不属于用户接口，协议栈回调函数*/
-void bt_discon_complete_handle(u8 *addr , int reason)
-{
+void bt_discon_complete_handle(u8 *addr, int reason) {
     printf("bt_discon_complete:0x%x\n",reason);
-    if(reason==0||reason==0x40 )
-    {   //连接成功
-#if BT_STEREO
-		if((user_val->auto_connection_stereo)&&reason==0x40)
-		{
-			puts("-----------not clean auto_connection_stereo1\n");
-		}
-		else
-		{
-           user_val->auto_connection_counter = 0;
-           user_val->auto_connection_stereo=0;
-		}
-#else
-        user_val->auto_connection_counter = 0;
-#endif
-        return ;
-    }else if(reason==0xfc){
-		puts("vm no bd_addr\n");
-		if(get_emitter_role() == BD_ROLE_SLAVE) {
-			puts("emitter slave,open page_scan\n");
-			bt_page_scan(1);
-		}
-        return ;
-    }
-#if BT_STEREO
-	else if(reason==0x10||reason==0xf||reason==0x13||reason==0x14)
-	{
-		puts("conneciton accept timeout\n");
-		bt_page_scan(1);
-        return ;
-	}
-#else
-	else if((reason==0x10)||(reason == 0xf))
-	{
-		puts("conneciton accept timeout\n");
-		bt_page_scan(1);
-        return ;
-	}
-#endif
-
-#if BT_STEREO
-    clear_a2dP_sink_addr(addr);
-#endif
-
-	if (reason == 0x16) {
-		puts("Conn Terminated by Local Host\n");
-#if BT_STEREO
-          if(get_current_search_index() >= 1)
-		  {    //继续搜索下一个设备
-               user_send_cmd_prepare(USER_CTRL_START_CONNECTION,0,NULL);
-		  }else{
-              bt_page_scan(1);
-		  }
-#else
-		if((get_emitter_role() == BD_ROLE_HOST) && (g_user_disconnect_bt == 0))
-		{
-			puts("authencation failed\n");
-			user_send_cmd_prepare(USER_CTRL_START_CONNECT_EMITTER,0,NULL);
-		    return;
-		}
-		g_user_disconnect_bt = 0;
-		if(get_emitter_role() == BD_ROLE_SLAVE) {
-        	bt_page_scan(1);
-		}
-#endif
-		vm_check_all(0);
-	} else if(reason == 0x08){
-		puts("\nconntime timeout\n");
-		if(!get_remote_test_flag()){
-
-#if BT_STEREO
-            if(get_bt_prev_status() != BT_STATUS_SUSPEND &&
-                 (get_call_status() == BT_CALL_HANGUP)&&
-				 (BD_CONN_MODE == get_stereo_salve(1)))
-#else
-            if(get_bt_prev_status() != BT_STATUS_SUSPEND &&
-                 (get_call_status() == BT_CALL_HANGUP))
-#endif
-            {
-				if(get_emitter_role() == BD_ROLE_HOST) {
-                	user_val->auto_connection_counter = 0;
-				}
-				else {
-                	user_val->auto_connection_counter = 6;
-				}
-                puts("\nsuper timeout\n");
-#if BT_STEREO
-                if(BT_STATUS_STEREO_WAITING_CONN== get_stereo_bt_connect_status())///手机连接掉线，回连手机之后继续回连对箱
-				{
-                     puts("\nafter auto_connection_stereo\n");
-                     after_auto_connection_stereo(1,0);
-				     user_send_cmd_prepare(USER_DEL_PAGE_STEREO_HCI,0,NULL);
-				     user_val->auto_connection_stereo = 1;
-                     user_val->auto_connection_counter = 4;
-				}
-#endif
-                user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR,6,addr);
+    switch(reason) {
+        case 0:
+        case 0x40: {
+                ///连接成功
+                printf("connect success with reason :0x%x\n",reason);
+                user_val->auto_connection_counter = 0;
+                return ;
             }
-		}else{
-		     user_val->auto_connection_counter = 0;
-		     bt_page_scan(1);
-		}
-	}else if(reason == 0x04){
-		if(! user_val->auto_connection_counter){
-		    puts("page timeout---\n");
-			if(get_emitter_role() == BD_ROLE_HOST)
-			{
-				//user_send_cmd_prepare(USER_CTRL_START_CONNECT_EMITTER,0,NULL);
-				return;
-			}
-		    if(get_current_search_index() >= 1)
-		    {    //继续搜索下一个设备
-				puts("page_timeout,connect next_dev\n");
-                 user_send_cmd_prepare(USER_CTRL_START_CONNECTION,0,NULL);
-		    }else{
-#if BT_STEREO
-			if(user_val->auto_connection_stereo)
-     		{
-                user_val->auto_connection_stereo = 0;
-			    puts("-----------clean auto_connection_stereo2\n");
-     			if((BT_STATUS_WAITINT_CONN == get_stereo_bt_connect_status()))
-     			{
-                      puts("\nstart2 auto_connection_stereo\n");
-		              bt_page_scan(1);
-                      after_auto_connection_stereo(0,1);
-					  return;
-     			}
-     		}
-            user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR_STEREO,0,NULL);
-#endif
+        case 0xfc: {
+                puts("vm no bd_addr\n");
+                if(get_emitter_role() == BD_ROLE_SLAVE) {
+                    puts("emitter slave,open page_scan\n");
+                    bt_page_scan(1);
+                }
+                return;
+            }
+        case 0x10:
+        case 0xf: {
+                puts("conneciton accept timeout\n");
                 bt_page_scan(1);
-				bt_power_max(0xFF);
-		    }
-		} else {
-		    if(get_bt_prev_status() != BT_STATUS_SUSPEND){
-                 printf("auto_conn_cnt:%d\n",user_val->auto_connection_counter);
-                 user_val->auto_connection_counter--;
-                 if(user_val->auto_connection_counter%2) {
-                     bt_page_scan(1);
-                     sys_time_auto_connection(addr);
-                 }
-                 else {
-                     bt_page_scan(0);
-                     user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR,6,addr);
-                 }
-		    }
-		}
-	} else if(reason == 0x0b){
-		puts("Connection Exist\n");
-		user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR,6,addr);
-	}else if(reason == 0x06){
-		//connect continue after link missing
-		puts("link_key_missing,connect again\n");
-		user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR,6,addr);
-	}
+                return ;
+            }
+        case  0x16:    {
+                puts("Conn Terminated by Local Host\n");
+                if((get_emitter_role() == BD_ROLE_HOST) && (g_user_disconnect_bt == 0)) {
+                    puts("authencation failed\n");
+                    user_send_cmd_prepare(USER_CTRL_START_CONNECT_EMITTER,0,NULL);
+                    return;
+                }
+                g_user_disconnect_bt = 0;
+                if(get_emitter_role() == BD_ROLE_SLAVE) {
+                    bt_page_scan(1);
+                }
+                vm_check_all(0);
+                break;
+            }
+        case 0x08: {
+                puts("\nconntime timeout\n");
+                if(!get_remote_test_flag()) {
+                    if(get_bt_prev_status() != BT_STATUS_SUSPEND &&
+                            (get_call_status() == BT_CALL_HANGUP))
+
+                    {
+                        if(get_emitter_role() == BD_ROLE_HOST) {
+                            user_val->auto_connection_counter = 0;
+                        } else {
+                            user_val->auto_connection_counter = 6;
+                        }
+                        puts("\nsuper timeout\n");
+                        user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR,6,addr);
+                    }
+                } else {
+                    user_val->auto_connection_counter = 0;
+                    bt_page_scan(1);
+                }
+                break;
+            }
+        case 0x04: {
+                if(! user_val->auto_connection_counter) {
+                    puts("page timeout---\n");
+                    if(get_emitter_role() == BD_ROLE_HOST) {
+                        user_send_cmd_prepare(USER_CTRL_START_CONNECT_EMITTER,0,NULL);
+                        return;
+                    }
+                    if(get_current_search_index() >= 1) {
+                        //继续搜索下一个设备
+                        puts("page_timeout,connect next_dev\n");
+                        user_send_cmd_prepare(USER_CTRL_START_CONNECTION,0,NULL);
+                    } else {
+                        bt_page_scan(1);
+                        bt_power_max(0xFF);
+                    }
+                } else {
+                    if(get_bt_prev_status() != BT_STATUS_SUSPEND) {
+                        printf("auto_conn_cnt:%d\n",user_val->auto_connection_counter);
+                        user_val->auto_connection_counter--;
+                        if(user_val->auto_connection_counter%2) {
+                            bt_page_scan(1);
+                            sys_time_auto_connection(addr);
+                        } else {
+                            bt_page_scan(0);
+                            user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR,6,addr);
+                        }
+                    }
+                }
+                break;
+            }
+        case 0x0b: {
+                puts("Connection Exist\n");
+                user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR,6,addr);
+                break;
+            }
+        case 0x06: {
+                //connect continue after link missing
+                puts("link_key_missing,connect again\n");
+                user_send_cmd_prepare(USER_CTRL_START_CONNEC_VIA_ADDR,6,addr);
+                break;
+            }
+    }
 }

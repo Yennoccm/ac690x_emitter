@@ -26,6 +26,7 @@
 #include "rcsp/rcsp_interface.h"
 #include "emitter_user.h"
 #include "dev_linein.h"
+#include "global_var.h"
 
 enum{
 	WAKEUP_0 = 0,
@@ -64,7 +65,6 @@ extern void set_poweroff_wakeup_io_handle_register(void (*handle)(),void (*sleep
 extern bool device_is_first_start();
 extern volatile u8 new_lg_dev_let;
 extern volatile u8 music_task_runing;
-extern u8 g_bt_conn_status;
 
 extern void ble_init_config(void);
 extern void light_init(void);
@@ -79,27 +79,27 @@ void set_poweroff_wakeup_io()
 	u8 wakeup_io_en = 0;
 	u8 wakeup_edge = 0;
 
-	//BIT(0)  PR0 : 0 disable  1 enable	
-	//BIT(1)  PR1 : 0 disable  1 enable	
-	//BIT(2)  PR2 : 0 disable  1 enable	
-	//BIT(3)  PR3 : 0 disable  1 enable	
+	//BIT(0)  PR0 : 0 disable  1 enable
+	//BIT(1)  PR1 : 0 disable  1 enable
+	//BIT(2)  PR2 : 0 disable  1 enable
+	//BIT(3)  PR3 : 0 disable  1 enable
 	/* wakeup_io_en |= WAKE_UP_PR0 | WAKE_UP_PR1 | WAKE_UP_PR2 | WAKE_UP_PR3; */
 	wakeup_io_en |=  WAKE_UP_PR2;
 
 	//BIT(4)  PR0 : 0 rising dege  1 failling edge
-	//BIT(5)  PR1 : 0 rising dege  1 failling edge 	
-	//BIT(6)  PR2 : 0 rising dege  1 failling edge 
-	//BIT(7)  PR3 : 0 rising dege  1 failling edge 
+	//BIT(5)  PR1 : 0 rising dege  1 failling edge
+	//BIT(6)  PR2 : 0 rising dege  1 failling edge
+	//BIT(7)  PR3 : 0 rising dege  1 failling edge
 	/* wakeup_edge |= EDGE_PR0 | EDGE_PR1 | EDGE_PR2 | EDGE_PR3;     //failling edge */
 	/* wakeup_edge &= ~(EDGE_PR0 | EDGE_PR1 | EDGE_PR2 | EDGE_PR3);  //rising dege */
 	wakeup_edge |= EDGE_PR2;     //failling edge
 
-	soft_poweroff_wakeup_io(wakeup_io_en , wakeup_edge); 
+	soft_poweroff_wakeup_io(wakeup_io_en , wakeup_edge);
 }
 
 /*enter sleep mode wakeup IO setting*/
 void enter_sleep_mode_set(u16 wakeup_cfg , u8 wakeup_edge)
-{	
+{
 	close_wdt();
 
 	dac_off_control(); //close dac mudule
@@ -332,7 +332,7 @@ void enter_sleep_mode_set(u16 wakeup_cfg , u8 wakeup_edge)
 			break;
 
 		default:
-			return;	
+			return;
 	}
 }
 
@@ -345,7 +345,7 @@ void set_sleep_mode_wakeup_io()
 /*sleep mode before close IRQ callback fuction*/
 void set_sleep_before_close_irq()
 {
-#if FM_RADIO_EN
+#if 1
     if(compare_task_name(FM_TASK_NAME))
 	{
     	fm_radio_powerdown();
@@ -377,8 +377,8 @@ static void delay_us(u32 n)
 }
 
 
-extern const u32 ad_table[]; 
-extern void adc_init_api(u32 channel,u32 lsb_clk,u8 lvd_en); 
+extern const u32 ad_table[];
+extern void adc_init_api(u32 channel,u32 lsb_clk,u8 lvd_en);
 extern void adc_scan(void *param);
 extern u16 get_battery_level(void);
 
@@ -386,9 +386,9 @@ static u8 low_power_cnt = 0;
 static u32 normal_power_cnt = 0;
 
 /* mode 1:power on     2:power off*/
-void ldo5v_detect_deal(u8 mode) 
+void ldo5v_detect_deal(u8 mode)
 {
-	static u32 delay_2ms_cnt = 0; 
+	static u32 delay_2ms_cnt = 0;
 	u8 val = 0;
 	u8 tmp;
 
@@ -397,7 +397,7 @@ void ldo5v_detect_deal(u8 mode)
 }
 //message in this table can do when a phone call
 //be careful to add a message
-const int check_msg_table[] = 
+const int check_msg_table[] =
 {
 	SYS_EVENT_LGDEV_ONLINE,
 	SYS_EVENT_LGDEV_OFFLINE,
@@ -435,7 +435,7 @@ static void TaskMain(void *p)
 #if 0
 	    #include "iic.h"
 	    eeprom_verify();
-		while(1); 
+		while(1);
 #endif
 
 
@@ -447,7 +447,7 @@ static void TaskMain(void *p)
     {
         os_taskq_pend(0, ARRAY_SIZE(msg), msg);
         if(msg[0] == MSG_POWER_ON)
-        {	
+        {
             puts("\n****************power_on***************\n");
             soft_power_ctl(PWR_ON);
             break;
@@ -455,7 +455,7 @@ static void TaskMain(void *p)
     }
   #else
 	while(1)
-	{	
+	{
 		rtc_module_ldo5v_detect(1,0);
 		soft_power_ctl(PWR_OFF);
 	    memset(msg,0x00,sizeof(msg));
@@ -465,19 +465,19 @@ static void TaskMain(void *p)
 			printf("key:%x\n",msg[0]);
 		}
 	    if(msg[0] == MSG_POWER_ON)
-		{	 
+		{
 			puts("****************power_on***************\n");
 	        soft_poweroff_cnt = 0;
             soft_power_ctl(PWR_ON);
 	    }
 		else if(msg[0] == MSG_POWER_OFF)
-		{	   
+		{
 			puts("****************power_off***************\n");
 		    soft_power_ctl(PWR_OFF);
 		}
 	}
-#endif		
-#endif		
+#endif
+#endif
 
 	//SFR(JL_SYSTEM->LDO_CON,7,3,1);
     led_init();
@@ -514,11 +514,11 @@ static void TaskMain(void *p)
 				}
 			}
 			if(!flag)
-			   continue;	
+			   continue;
 		}
         //printf("main_msg %08x %08x \n",msg[0],msg[1]);
 #if SUPPORT_APP_RCSP_EN
-		rcsp_main_task_msg_deal_before(msg);	
+		rcsp_main_task_msg_deal_before(msg);
 #endif
 		switch(msg[0])
         {
@@ -534,7 +534,7 @@ static void TaskMain(void *p)
                     lg_dev_mount((void *)msg[1],status,msg[2]);
                     puts("power up\n");
 
-#if UI_ENABLE
+#if 1
                     ui_init_api();///必须挂载flash后才能初始化LCD显示
 #endif
 
@@ -577,7 +577,7 @@ static void TaskMain(void *p)
 									os_time_dly(1);
 								}while(music_task_runing);
 							}
-							task_create(MUSIC_TASK_NAME);	
+							task_create(MUSIC_TASK_NAME);
 						}
 					}
                     else if((task_switch(MUSIC_TASK_NAME, 0,SWITCH_SPEC_TASK)==RUN_TASK_ERR_HAS_RPT))
@@ -654,7 +654,7 @@ static void TaskMain(void *p)
 						}while(music_task_runing);
 					}
 					puts("create PC task\n");
-					task_create(PC_TASK_NAME); 
+					task_create(PC_TASK_NAME);
 				}
 				else {
             		task_switch(PC_TASK_NAME, 0, SWITCH_SPEC_TASK);
@@ -771,7 +771,7 @@ static void TaskMain(void *p)
 					}
 				} else {
 					set_emitter_aux_media(0);
-					task_create(MUSIC_TASK_NAME);	
+					task_create(MUSIC_TASK_NAME);
 				}
 			}
 			else {
@@ -807,7 +807,7 @@ static void TaskMain(void *p)
         case MSG_VOL_DOWN:
             if(dac_ctl.sys_vol_l)
                 dac_ctl.sys_vol_l--;
-#if BT_STEREO
+#if 0
             if(is_check_stereo_slave())
             {
                 os_taskq_post("btmsg", 1, msg[0]);
@@ -832,11 +832,11 @@ static void TaskMain(void *p)
             vm_cache_write(VM_SYS_VOL,&dac_ctl.sys_vol_l,2);
 #endif
             UI_menu_arg(MENU_MAIN_VOL,0);
-			
+
             break;
 
         case MSG_VOL_UP:
-		
+
 			if(msg[1]&0x80)
             {
 				dac_ctl.sys_vol_l = (u8)(msg[1]&0x7f);
@@ -849,7 +849,7 @@ static void TaskMain(void *p)
                 if(dac_ctl.sys_vol_l < MAX_SYS_VOL_L)
                 	dac_ctl.sys_vol_l++;
 
-#if BT_STEREO
+#if 0
                 if(is_check_stereo_slave())
                 {
                     os_taskq_post("btmsg", 1, msg[0]);
@@ -879,9 +879,9 @@ static void TaskMain(void *p)
             vm_cache_write(VM_SYS_VOL,&dac_ctl.sys_vol_l,2);
 #endif
             UI_menu_arg(MENU_MAIN_VOL,0);
-			
+
             break;
-#if BT_STEREO
+#if 0
         case MSG_VOL_STEREO:
             dac_ctl.sys_vol_l = msg[1] ;
              printf("V = %d\n",dac_ctl.sys_vol_l);
@@ -916,7 +916,7 @@ static void TaskMain(void *p)
             }
             UI_menu(MENU_REFRESH);
             break;
-        
+
         case MSG_LOW_POWER:
             puts("**MSG_LOW_POWER,auto shutdown**\n");
             going_to_pwr_off = 0;
@@ -1058,7 +1058,7 @@ static void TaskMain(void *p)
             }
             printf("input_number = %u   \n",input_number);
 
-#if UI_ENABLE
+#if 1
             UI_menu_arg(MENU_INPUT_NUMBER,input_number|(input_number_cnt<<24));
 #endif
             break;
@@ -1079,7 +1079,7 @@ static void TaskMain(void *p)
         }
 
 #if SUPPORT_APP_RCSP_EN
-		rcsp_main_task_msg_deal_after(msg);	
+		rcsp_main_task_msg_deal_after(msg);
 #endif
 
 	}

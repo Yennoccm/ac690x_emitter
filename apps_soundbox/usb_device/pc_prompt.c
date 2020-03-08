@@ -3,7 +3,7 @@
 ///#include "voice_prompt.h"
 #include "usb_device.h"
 
-#if USB_PC_EN
+#if 1
 
 volatile bool pc_prompt_playing = 0;
 
